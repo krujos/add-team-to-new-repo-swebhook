@@ -6,5 +6,8 @@ gem 'octokit'
 gem 'sinatra'
 gem 'thin'
 gem 'rake'
-gem 'rspec'
-gem 'rspec-core'
+
+group :development, :test do
+  gem 'rspec'
+  gem 'rspec-core'
+end
