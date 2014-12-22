@@ -8,6 +8,5 @@ gem 'thin'
 gem 'rake'
 
 group :development, :test do
-  gem 'rspec'
-  gem 'rspec-core'
+  gem 'rack-test'
 end

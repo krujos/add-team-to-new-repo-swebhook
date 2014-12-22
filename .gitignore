@@ -55,7 +55,7 @@ crashlytics-build.properties
 /coverage/
 /InstalledFiles
 /pkg/
-/spec/reports/
+/test_data/reports/
 /test/tmp/
 /test/version_tmp/
 /tmp/
