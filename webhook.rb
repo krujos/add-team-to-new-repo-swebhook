@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'Octokit'
+require 'json'
 
 github_secret = ENV['GITHUB_SECRET']
 github_access_token = ENV['GITHUB_ACCESS_TOKEN']
@@ -23,8 +24,11 @@ get '/' do
 end
 
 post '/' do
-  puts 'Received hook'
+  the_json = JSON.parse request.body.read
+  repo = the_json['repository']['full_name']
+  puts repo
+  client = Octokit::Client.new(:access_token => github_access_token)
+  client.repository(repo)
 
-  client = Octokit.client.new(:access_token => github_access_token )
 end
 
