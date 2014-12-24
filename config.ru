@@ -7,6 +7,3 @@ Bundler.require
 require './webhook.rb'
 
 run Sinatra::Application
-
-require 'rspec'
-require 'rack/test'

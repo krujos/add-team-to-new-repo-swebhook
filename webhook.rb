@@ -1,6 +1,7 @@
 require 'sinatra'
-require 'Octokit'
+require 'octokit'
 require 'json'
+require './validator'
 
 github_secret = ENV['GITHUB_SECRET']
 github_access_token = ENV['GITHUB_ACCESS_TOKEN']
@@ -22,17 +23,26 @@ if github_collobarator.nil?
   die('GITHUB_COLLABORATOR')
 end
 
-get '/' do
-  'Hello World'
+stack = Faraday::RackBuilder.new do |builder|
+  builder.response :logger
+  builder.use Octokit::Response::RaiseError
+  builder.adapter Faraday.default_adapter
 end
+Octokit.middleware = stack
 
 post '/' do
-  json = JSON.parse request.body.read
-  repo = json['repository']['id']
+  request_body = request.body.read
+  #validator = Validator.new
+  logger.info headers.keys
+  #unless validator.validate_request(headers['X-Hub-Signature'], request_body)
+  #  halt 400
+  #end
+  json = JSON.parse request_body
   repo_name = json['repository']['full_name']
   client = Octokit::Client.new(:access_token => github_access_token)
-  unless client.add_collaborator repo, github_collobarator, 'write'
+  unless client.add_team_repo(github_collobarator, repo_name)
     logger.error "Failed to add #{github_collobarator} to #{repo_name}"
+    halt 500
   end
   logger.info "Added #{github_collobarator} to #{repo_name}"
 end
