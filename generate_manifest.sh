@@ -1,9 +1,13 @@
 #!/bin/sh
+if [ -z $APP_ROUTE ] ; then 
+	APP_ROUTE=$APP_NAME
+fi
 
 cat <<EOF > manifest.yml
 applications:
-- name: ps-at-e-webhook
+- name: $APP_NAME
   memory: 128M
+  host: $APP_ROUTE
 
   env:
      GITHUB_SECRET: $GITHUB_SECRET

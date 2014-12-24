@@ -23,6 +23,8 @@ if github_collobarator.nil?
   die('GITHUB_COLLABORATOR')
 end
 
+enable :logging
+
 stack = Faraday::RackBuilder.new do |builder|
   builder.response :logger
   builder.use Octokit::Response::RaiseError
@@ -32,11 +34,11 @@ Octokit.middleware = stack
 
 post '/' do
   request_body = request.body.read
-  #validator = Validator.new
-  logger.info headers.keys
-  #unless validator.validate_request(headers['X-Hub-Signature'], request_body)
-  #  halt 400
-  #end
+  validator = Validator.new
+  logger.info request.env
+  unless validator.validate_request(request.env['HTTP_X_HUB_SIGNATURE'], request_body)
+    halt 400
+  end
   json = JSON.parse request_body
   repo_name = json['repository']['full_name']
   client = Octokit::Client.new(:access_token => github_access_token)

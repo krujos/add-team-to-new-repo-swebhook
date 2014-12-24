@@ -17,7 +17,7 @@ describe 'The webhook' do
 
   before do
     @validator = double(Validator)
-    #expect(Validator).to receive(:new) {@validator}
+    expect(Validator).to receive(:new) {@validator}
     @payload = File.read('spec/test_data/repository_hook.json')
     WebMock.disable_net_connect!(:allow_localhost => true)
 
@@ -30,16 +30,16 @@ describe 'The webhook' do
   context 'post to / does the right thing' do
 
     it 'calls octokit when it receives a webhook' do
-      #expect(@validator).to receive(:validate_request).with('secret', @payload) { true }
-      post '/', @payload
+      expect(@validator).to receive(:validate_request).with('secret', @payload) { true }
+      post '/', @payload, 'HTTP_X_HUB_SIGNATURE' => 'secret'
       expect(last_response).to be_ok
     end
 
-    #it 'fails when the secret is not right' do
-      #expect(@validator).to receive(:validate_request).with('secret', @payload) { false }
-      #post '/', @payload, 'HTTP_X-Hub-Signature' => 'secret'
-      #expect(last_response).to be_bad_request
-    #end
+    it 'fails when the secret is not right' do
+      expect(@validator).to receive(:validate_request).with('secret', @payload) { false }
+      post '/', @payload, 'HTTP_X_HUB_SIGNATURE' => 'secret'
+      expect(last_response).to be_bad_request
+    end
   end
 end
 
