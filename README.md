@@ -16,11 +16,11 @@ This is a generic app that should serve the same need for any github org.
 There's a manifest generator to help getting the environment variables correct, and avoid hardcoding them somewhere as checking in a manifest with your access key is probably a bad idea. 
 
 ```
-➜  ps-at-e-webhook git:(master) ✗ export GITHUB_SECRET=secret 
-➜  ps-at-e-webhook git:(master) ✗ export GITHUB_ACCESS_TOKEN=token
-➜  ps-at-e-webhook git:(master) ✗ export GITHUB_COLLABORATOR=collab
-➜  ps-at-e-webhook git:(master) ✗ ./generate_manifest.sh
-➜  ps-at-e-webhook git:(master) ✗ cat manifest.yml
+➜  add-team-to-new-repo-webhook git:(master) ✗ export GITHUB_SECRET=secret 
+➜  add-team-to-new-repo-webhook git:(master) ✗ export GITHUB_ACCESS_TOKEN=token
+➜  add-team-to-new-repo-webhook git:(master) ✗ export GITHUB_COLLABORATOR=collab
+➜  add-team-to-new-repo-webhook git:(master) ✗ ./generate_manifest.sh
+➜  add-team-to-new-repo-webhook git:(master) ✗ cat manifest.yml
 applications:
 - name: ps-at-e-webhook
   memory: 128M
