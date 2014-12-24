@@ -1,7 +1,5 @@
 #Github web hook to add a team on repo create
-At [Pivotal](http://pivotal.io) we use this web hook to add teams who are not owners but still need commit rights to our repos every time we create one. This code runs in [Cloud Foundry](http://run.pivotal.io) and uses environment variables to source the teams to add when the web hook is called. 
-
-This is a generic app that should serve the same need for any github org.
+At [Pivotal](http://pivotal.io) we use this web hook to add teams who are not owners but still need commit rights to our repos every time we create one. This code runs in [Cloud Foundry](http://run.pivotal.io) (although it could run anywhere, it's just a rack app) and uses environment variables to source the teams to add when the web hook is called. 
 
 ##Getting started
 * Make sure you have an account on [run.pivotal.io](http://run.pivotal.io) or other another Cloud Foundry provider. 
