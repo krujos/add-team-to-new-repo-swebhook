@@ -3,23 +3,15 @@ require 'octokit'
 require 'json'
 require './validator'
 
-github_secret = ENV['GITHUB_SECRET']
-github_access_token = ENV['GITHUB_ACCESS_TOKEN']
-github_collobarator = ENV['GITHUB_COLLABORATOR']
-
-def die(var)
-  abort "#{var} is not set. Set #{var}! Hint: use 'cf env' to set environment variables."
-end
-
-if github_secret.nil?
+if ENV['GITHUB_SECRET'].nil?
   die('GITHUB_SECRET')
 end
 
-if github_access_token.nil?
+if ENV['GITHUB_ACCESS_TOKEN'].nil?
   die('GITHUB_ACCESS_TOKEN')
 end
 
-if github_collobarator.nil?
+if ENV['GITHUB_COLLABORATOR'].nil?
   die('GITHUB_COLLABORATOR')
 end
 
@@ -32,20 +24,32 @@ stack = Faraday::RackBuilder.new do |builder|
 end
 Octokit.middleware = stack
 
+helpers do
+  def die(var)
+    abort "#{var} is not set. Set #{var}! Hint: use 'cf env' to set environment variables."
+  end
+
+  def get_teams
+    ENV['GITHUB_COLLABORATOR'].split(':')
+  end
+end
+
 post '/' do
+  logger.debug request.env
   request_body = request.body.read
   validator = Validator.new
-  logger.info request.env
   unless validator.validate_request(request.env['HTTP_X_HUB_SIGNATURE'], request_body)
     halt 400
   end
   json = JSON.parse request_body
   repo_name = json['repository']['full_name']
-  client = Octokit::Client.new(:access_token => github_access_token)
-  unless client.add_team_repo(github_collobarator, repo_name)
-    logger.error "Failed to add #{github_collobarator} to #{repo_name}"
-    halt 500
+  client = Octokit::Client.new(:access_token => ENV['GITHUB_ACCESS_TOKEN'])
+  get_teams.each do |team|
+    unless client.add_team_repo(team, repo_name)
+      logger.error "Failed to add #{team} to #{repo_name}"
+      halt 500
+    end
   end
-  logger.info "Added #{github_collobarator} to #{repo_name}"
+  logger.info "Added #{ENV['GITHUB_COLLABORATOR']} to #{repo_name}"
 end
 

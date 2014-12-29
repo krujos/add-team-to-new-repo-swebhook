@@ -62,7 +62,7 @@ urls: mywebhook.cfapps.io
 
 ```GITHUB_ACCESS_TOKEN``` is the personal access token to use for accessing the repo to add a collaborator. You can create a new token [here](https://github.com/settings/tokens/new). My access token has the ```admin:org``` permission. 
 
-```GITHUB_COLLABORATOR``` is the id of the team you want to add to the new repo. You can obtain that by running ```curl https://<access_token>@api.github.com/orgs/<your_org>/teams``` and looking for the ```id``` attribute of the team you're interested in. 
+```GITHUB_COLLABORATOR``` is the id of the team you want to add to the new repo. You can obtain that by running ```curl https://<access_token>@api.github.com/orgs/<your_org>/teams``` and looking for the ```id``` attribute of the team you're interested in. If you want to add multiple teams separate them with a ```:```, e.g. ```export GITHUB_COLLABORATOR=11223344:55667788```.
 
 ```APP_NAME``` is the application name to use when pushing to Cloud Foundry. 
 
